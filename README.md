@@ -28,7 +28,6 @@ php -S localhost:8000     # dann http://localhost:8000 öffnen
 
 | Was | Wo |
 |---|---|
-| **Vorname des Inhabers** | `impressum.html`, zwei Stellen, gelb markiert |
 | **Speicherdauer der Server-Logdateien** | `datenschutz.html`, beim Hoster erfragen |
 | **Zwei bis drei echte Kundenstimmen** | `index.html`, Abschnitt „Stimmen" |
 | **Ein weiteres Referenzfoto** | `index.html`, letzte Kachel der Galerie |
@@ -37,9 +36,6 @@ php -S localhost:8000     # dann http://localhost:8000 öffnen
 
 Alles gelb Schraffierte ist ein Platzhalter. Nach dem Ersetzen jeweils
 `class="platzhalter"` entfernen, damit die Markierung verschwindet.
-
-Der Vorname ist Pflicht: Bei einem Einzelunternehmen verlangt § 5 DDG den
-vollständigen Vor- und Nachnamen. Der Geschäftsname allein genügt nicht.
 
 ---
 
