@@ -1,0 +1,1232 @@
+/* ==========================================================================
+   ElbService Freyer — Dresden
+   Glas- und Fensterreinigung
+
+   Gestaltungssystem
+   -----------------
+   Die Seite ist als Fenster gebaut. Flaechen sind Scheiben (.scheibe),
+   Trennlinien sind Sprossen (.sprosse) — also die Stege, die eine
+   Verglasung teilen. Deshalb: keine abgerundeten Ecken an Glasflaechen,
+   Haarlinien statt Schatten, und ein Raster mit ungleichen Feldern,
+   wie es echte Dresdner Altbaufenster haben.
+
+   Die Akzentfarbe ist das Gruen der Glaskante — die Farbe, die Floatglas
+   von der Seite zeigt. Sie ersetzt das erwartbare Signalblau.
+   ========================================================================== */
+
+/* --- Token ---------------------------------------------------------------- */
+
+:root {
+  /* Farbe */
+  --tinte:      #0A0F14;  /* Schrift, aus dem Logo-Schwarz, leicht kuehl   */
+  --elbe:       #17356B;  /* Marineblau der Logo-Welle, Traegerfarbe       */
+  --strom:      #4A72C4;  /* helleres Wellenblau, sekundaer                */
+  --glaskante:  #1E6E5E;  /* Gruen der Floatglas-Kante, einziger Akzent    */
+  --tageslicht: #F7F9FA;  /* kuehles Fast-Weiss, Grundflaeche              */
+  --dunst:      #DCE4E9;  /* beschlagene Scheibe, Linien und Raender       */
+  --weiss:      #FFFFFF;
+
+  /* Schrift */
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --text:    "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --daten:   "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* Raster */
+  --bahn:  78rem;   /* Breite des Satzspiegels */
+  --steg:  1px;     /* Staerke einer Sprosse   */
+  --luft:  clamp(4.5rem, 9vw, 8.5rem); /* vertikaler Abstand der Abschnitte */
+}
+
+/* --- Grundlage ------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  background: var(--tageslicht);
+  color: var(--tinte);
+  font-family: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  font-feature-settings: "kern", "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { display: block; max-width: 100%; height: auto; }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--glaskante);
+  outline-offset: 3px;
+}
+
+/* Sprungmarke fuer Tastatur- und Screenreader-Nutzung */
+.sprung {
+  position: absolute;
+  left: 1rem;
+  top: -6rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: var(--tinte);
+  color: var(--weiss);
+  font-family: var(--daten);
+  font-size: 0.8125rem;
+  text-decoration: none;
+  transition: top 0.18s ease;
+}
+.sprung:focus { top: 1rem; }
+
+/* --- Typografie ----------------------------------------------------------- */
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-stretch: 118%;          /* breit wie eine Fensteroeffnung */
+  line-height: 1.04;
+  letter-spacing: -0.022em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(2.65rem, 6.6vw, 5.6rem); }
+h2 { font-size: clamp(2rem, 4.1vw, 3.35rem); }
+h3 { font-size: clamp(1.2rem, 1.7vw, 1.45rem); font-stretch: 106%; letter-spacing: -0.012em; }
+h4 { font-size: 1.0625rem; font-stretch: 104%; }
+
+p { margin: 0 0 1.15em; }
+p:last-child { margin-bottom: 0; }
+
+/* Kennzeichnung ueber einer Ueberschrift: Nummer, Bereich, Kategorie */
+.marke {
+  display: block;
+  font-family: var(--daten);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--glaskante);
+  margin-bottom: 1.15rem;
+}
+
+.vorspann {
+  font-size: clamp(1.075rem, 1.35vw, 1.24rem);
+  line-height: 1.6;
+  color: #3A4750;
+  max-width: 54ch;
+}
+
+/* --- Raster --------------------------------------------------------------- */
+
+.bahn {
+  width: 100%;
+  max-width: var(--bahn);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.abschnitt { padding-block: var(--luft); }
+
+.abschnitt--eng { padding-block: calc(var(--luft) * 0.62); }
+
+/* Sprossen: die Haarlinien, die Flaechen teilen */
+.sprosse-oben  { border-top: var(--steg) solid var(--dunst); }
+.sprosse-unten { border-bottom: var(--steg) solid var(--dunst); }
+
+.kopfzeile-abschnitt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-bottom: clamp(2.5rem, 4.5vw, 4rem);
+}
+
+@media (min-width: 60rem) {
+  .kopfzeile-abschnitt {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: end;
+  }
+}
+
+/* --- Schaltflaechen ------------------------------------------------------- */
+
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.6rem;
+  border: var(--steg) solid transparent;
+  border-radius: 999px;
+  font-family: var(--text);
+  font-size: 0.975rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease,
+              border-color 0.18s ease, transform 0.18s ease;
+}
+
+.knopf:hover { transform: translateY(-2px); }
+
+.knopf--voll {
+  background: var(--glaskante);
+  color: var(--weiss);
+}
+.knopf--voll:hover { background: #175A4C; }
+
+.knopf--linie {
+  background: transparent;
+  color: var(--tinte);
+  border-color: #B9C6CE;
+}
+.knopf--linie:hover { border-color: var(--tinte); background: var(--weiss); }
+
+.knopf--dunkel {
+  background: var(--tinte);
+  color: var(--weiss);
+}
+.knopf--dunkel:hover { background: var(--elbe); }
+
+.knopf__pfeil { transition: transform 0.18s ease; }
+.knopf:hover .knopf__pfeil { transform: translateX(3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .knopf, .knopf__pfeil { transition: none; }
+  .knopf:hover { transform: none; }
+  .knopf:hover .knopf__pfeil { transform: none; }
+}
+
+/* --- Kopfbereich der Seite ------------------------------------------------ */
+
+.kopf {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(247, 249, 250, 0.88);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: var(--steg) solid var(--dunst);
+}
+
+.kopf__inhalt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 5rem;
+}
+
+.kopf__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.kopf__logo img { width: 2.9rem; height: auto; }
+
+.kopf__wortmarke {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.kopf__name {
+  font-family: var(--display);
+  font-stretch: 108%;
+  font-weight: 700;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+}
+
+.kopf__ort {
+  font-family: var(--daten);
+  font-size: 0.6875rem;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--strom);
+}
+
+.kopf__nav {
+  display: none;
+  gap: 2rem;
+}
+
+.kopf__nav a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding-block: 0.35rem;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.18s ease;
+}
+
+.kopf__nav a:hover { border-bottom-color: var(--glaskante); }
+
+.kopf__ruf {
+  display: none;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--daten);
+  font-size: 0.94rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.kopf__ruf:hover { color: var(--glaskante); }
+
+@media (min-width: 62rem) {
+  .kopf__nav { display: flex; }
+  .kopf__ruf { display: inline-flex; }
+}
+
+/* Auf kleinen Schirmen ersetzt eine feste Leiste unten die Navigation */
+.rufleiste {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: var(--steg) solid var(--dunst);
+  background: var(--weiss);
+}
+
+.rufleiste a {
+  padding: 1rem 0.75rem;
+  text-align: center;
+  font-size: 0.94rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rufleiste a + a {
+  background: var(--glaskante);
+  color: var(--weiss);
+}
+
+@media (min-width: 62rem) {
+  .rufleiste { display: none; }
+}
+
+/* --- Aufmacher: eine Scheibe, die einmal gewischt wird -------------------- */
+
+.aufmacher {
+  position: relative;
+  overflow: hidden;
+  border-bottom: var(--steg) solid var(--dunst);
+  isolation: isolate;
+}
+
+/* Ebene 1 — das, was hinter der Scheibe liegt.
+   Bis das eigene Foto vorliegt, steht hier Dresdner Vormittagshimmel
+   aus reinem CSS. Austausch: .aufmacher__blick { background-image: url(...) } */
+.aufmacher__blick {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-color: #9FBBD4;
+  background-image:
+    /* Verdunklung nur unten, wo die Schrift steht */
+    linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
+    /* Lichteinfall von links oben, wie durch eine offene Fensterlaibung */
+    radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+    /* Himmel ueber der Elbe: hell oben, tief unten */
+    linear-gradient(to bottom, #DCEAF4 0%, #A7C4DC 34%, #5D82AB 68%, #1F3D68 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Ebene 2 — der Schmutzfilm. Wird beim Laden einmal abgezogen. */
+.aufmacher__film {
+  position: absolute;
+  inset: -2%;
+  z-index: -1;
+  pointer-events: none;
+  backdrop-filter: blur(7px) saturate(65%) brightness(108%);
+  -webkit-backdrop-filter: blur(7px) saturate(65%) brightness(108%);
+  background-image:
+    repeating-linear-gradient(96deg,
+      rgba(255, 255, 255, 0.26) 0px,
+      rgba(255, 255, 255, 0.26) 2px,
+      rgba(255, 255, 255, 0)    2px,
+      rgba(255, 255, 255, 0)    17px),
+    repeating-linear-gradient(83deg,
+      rgba(190, 205, 215, 0.3) 0px,
+      rgba(190, 205, 215, 0.3) 1px,
+      rgba(190, 205, 215, 0)   1px,
+      rgba(190, 205, 215, 0)   28px);
+  clip-path: polygon(-25% 0, 100% 0, 100% 100%, 0 100%);
+  animation: abziehen 1.5s cubic-bezier(0.55, 0.06, 0.32, 1) 0.35s forwards;
+}
+
+@keyframes abziehen {
+  to { clip-path: polygon(112% 0, 130% 0, 130% 100%, 100% 100%); }
+}
+
+/* Die Kante des Abziehers, die dem Film vorausläuft */
+.aufmacher__kante {
+  position: absolute;
+  top: -12%;
+  bottom: -12%;
+  left: 0;
+  width: 3px;
+  z-index: -1;
+  pointer-events: none;
+  transform: rotate(6deg) translateX(-30vw);
+  background: linear-gradient(to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.95) 18%,
+    rgba(255, 255, 255, 0.95) 82%,
+    rgba(255, 255, 255, 0));
+  box-shadow: 0 0 26px 7px rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  animation: kante-laeuft 1.5s cubic-bezier(0.55, 0.06, 0.32, 1) 0.35s forwards;
+}
+
+@keyframes kante-laeuft {
+  0%   { transform: rotate(6deg) translateX(-30vw); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: rotate(6deg) translateX(112vw); opacity: 0; }
+}
+
+/* Wer Bewegung reduziert, bekommt die saubere Scheibe sofort. */
+@media (prefers-reduced-motion: reduce) {
+  .aufmacher__film { animation: none; opacity: 0; }
+  .aufmacher__kante { animation: none; opacity: 0; }
+}
+
+.aufmacher__satz {
+  position: relative;
+  padding-block: clamp(6rem, 15vh, 11rem) clamp(3.5rem, 7vh, 5.5rem);
+  min-height: min(82vh, 46rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: var(--weiss);
+}
+
+/* Die Ortszeile steht im hellen Teil des Bildes und braucht einen eigenen
+   Grund — sonst haengt ihre Lesbarkeit davon ab, welches Foto dahinterliegt. */
+.aufmacher__ort {
+  align-self: flex-start;
+  margin: 0 0 1.6rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(9, 20, 38, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: var(--steg) solid rgba(255, 255, 255, 0.3);
+  font-family: var(--daten);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--weiss);
+}
+
+/* Die Sprosse laeuft durch die Zeile — wie ein Fensterkreuz vor dem Blick */
+.aufmacher__titel {
+  position: relative;
+  max-width: 17ch;
+  text-shadow: 0 2px 30px rgba(10, 15, 20, 0.32);
+}
+
+.aufmacher__titel::after {
+  content: "";
+  position: absolute;
+  left: -100vw;
+  right: -100vw;
+  top: 52%;
+  height: var(--steg);
+  background: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+/* Der senkrechte Steg laeuft ueber die volle Hoehe des Aufmachers. */
+.aufmacher__satz::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 63%;
+  width: var(--steg);
+  background: linear-gradient(to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.42) 18%,
+    rgba(255, 255, 255, 0.42) 88%,
+    rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+/* Auf schmalen Schirmen fehlt der senkrechte Steg — die Waagerechte allein
+   liest sich dann wie ein Durchstreichen, deshalb entfaellt auch sie. */
+@media (max-width: 44rem) {
+  .aufmacher__satz::before { display: none; }
+  .aufmacher__titel::after { display: none; }
+}
+
+.aufmacher__text {
+  margin-top: 1.9rem;
+  max-width: 46ch;
+  font-size: clamp(1.075rem, 1.4vw, 1.22rem);
+  line-height: 1.58;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 16px rgba(10, 15, 20, 0.4);
+}
+
+.aufmacher__wege {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2.6rem;
+}
+
+.aufmacher__weiss {
+  background: var(--weiss);
+  color: var(--tinte);
+}
+.aufmacher__weiss:hover { background: var(--tageslicht); }
+
+.aufmacher__klar {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--weiss);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+.aufmacher__klar:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* Kennzahlenband unter dem Aufmacher.
+   Die Sprossen entstehen als 1px-Luecke ueber der Traegerfarbe — so sitzen
+   sie bei jeder Spaltenzahl richtig, ohne Randregeln je Feld. */
+.band {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--steg);
+  background: var(--dunst);
+  border-block: var(--steg) solid var(--dunst);
+}
+
+.band__feld {
+  padding: 1.7rem clamp(1.25rem, 3vw, 2.25rem);
+  background: var(--weiss);
+}
+
+.band__wert {
+  display: block;
+  font-family: var(--display);
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.5vw, 1.32rem);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin-bottom: 0.45rem;
+  text-wrap: balance;
+}
+
+.band__was {
+  font-family: var(--daten);
+  font-size: 0.75rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #55636D;
+}
+
+@media (min-width: 52rem) {
+  .band { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* --- Zwei Wege: Zuhause und Objekt --------------------------------------- */
+
+.wege {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--steg);
+  background: var(--dunst);
+  border: var(--steg) solid var(--dunst);
+}
+
+@media (min-width: 54rem) {
+  .wege { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.weg {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: clamp(2rem, 4vw, 3.25rem);
+  background: var(--weiss);
+}
+
+.weg__kopf {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.weg__wer {
+  font-family: var(--daten);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--strom);
+}
+
+.weg__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.weg__liste li {
+  display: grid;
+  grid-template-columns: 1.35rem minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+  font-size: 0.985rem;
+  color: #3A4750;
+}
+
+.weg__haken {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex-shrink: 0;
+  color: var(--glaskante);
+  margin-top: 0.1rem;
+}
+
+.weg__fuss { margin-top: auto; padding-top: 0.5rem; }
+
+/* --- Leistungen: ein Fenster mit ungleichen Feldern ----------------------- */
+
+.fenster {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--steg);
+  background: var(--dunst);
+  border: var(--steg) solid var(--dunst);
+}
+
+/* Ab Tablet: das grosse Feld links, vier kleinere rechts —
+   die Aufteilung eines Altbaufensters mit Oberlicht. */
+@media (min-width: 50rem) {
+  .fenster {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+  .fenster__feld--gross {
+    grid-row: span 2;
+  }
+}
+
+@media (min-width: 72rem) {
+  .fenster {
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fenster__feld {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  background: var(--weiss);
+  transition: background-color 0.2s ease;
+}
+
+.fenster__feld:hover { background: #FCFDFD; }
+
+.fenster__feld--gross { justify-content: space-between; }
+
+.fenster__zeichen {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--elbe);
+  margin-bottom: 0.35rem;
+}
+
+.fenster__feld--gross .fenster__zeichen { width: 3.1rem; height: 3.1rem; }
+
+.fenster__text {
+  font-size: 0.975rem;
+  color: #3A4750;
+  margin: 0;
+}
+
+.fenster__mit {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.fenster__mit li {
+  font-family: var(--daten);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #55636D;
+  border: var(--steg) solid var(--dunst);
+  padding: 0.3rem 0.6rem;
+}
+
+/* --- Ergebnis: Regler zwischen vorher und nachher ------------------------ */
+
+.ergebnis {
+  position: relative;
+  border: var(--steg) solid var(--dunst);
+  background: var(--weiss);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  touch-action: pan-y;
+}
+
+@media (min-width: 50rem) {
+  .ergebnis { aspect-ratio: 2 / 1; }
+}
+
+.ergebnis__bild {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.ergebnis__bild--nachher {
+  /* Der geputzte Zustand liegt oben und wird von links freigegeben. */
+  clip-path: inset(0 calc(100% - var(--stand, 50%)) 0 0);
+}
+
+.ergebnis__schild {
+  position: absolute;
+  bottom: 1rem;
+  z-index: 3;
+  font-family: var(--daten);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.75rem;
+  background: rgba(10, 15, 20, 0.72);
+  color: var(--weiss);
+  pointer-events: none;
+}
+
+.ergebnis__schild--vorher  { right: 1rem; }
+.ergebnis__schild--nachher { left: 1rem; }
+
+.ergebnis__kante {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--stand, 50%);
+  width: 2px;
+  z-index: 4;
+  background: var(--weiss);
+  box-shadow: 0 0 18px rgba(10, 15, 20, 0.35);
+  pointer-events: none;
+  transform: translateX(-1px);
+}
+
+.ergebnis__griff {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3rem;
+  height: 3rem;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: var(--weiss);
+  color: var(--tinte);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 20px rgba(10, 15, 20, 0.3);
+}
+
+/* Der eigentliche Regler liegt unsichtbar darueber:
+   so funktionieren Ziehen, Tastatur und Screenreader ohne Zusatzcode. */
+.ergebnis__regler {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+.ergebnis__regler:focus-visible { opacity: 0; }
+.ergebnis:has(.ergebnis__regler:focus-visible) {
+  outline: 3px solid var(--glaskante);
+  outline-offset: 3px;
+}
+
+/* --- Ablauf: hier tragen die Nummern echte Reihenfolge ------------------- */
+
+.ablauf {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--steg);
+  background: var(--dunst);
+  border: var(--steg) solid var(--dunst);
+  counter-reset: schritt;
+}
+
+@media (min-width: 44rem) { .ablauf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 68rem) { .ablauf { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.ablauf__schritt {
+  counter-increment: schritt;
+  padding: clamp(1.75rem, 3vw, 2.4rem);
+  background: var(--weiss);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ablauf__schritt::before {
+  content: counter(schritt, decimal-leading-zero);
+  font-family: var(--daten);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--glaskante);
+  padding-bottom: 0.85rem;
+  border-bottom: var(--steg) solid var(--dunst);
+  margin-bottom: 0.35rem;
+}
+
+.ablauf__text {
+  font-size: 0.975rem;
+  color: #3A4750;
+  margin: 0;
+}
+
+/* --- Was den Preis bestimmt ---------------------------------------------- */
+
+.rechnung {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--steg);
+  background: var(--dunst);
+  border: var(--steg) solid var(--dunst);
+}
+
+@media (min-width: 56rem) { .rechnung { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.rechnung__posten {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+  padding: 1.5rem clamp(1.5rem, 3vw, 2.25rem);
+  background: var(--weiss);
+}
+
+.rechnung__was {
+  font-family: var(--display);
+  font-stretch: 106%;
+  font-weight: 700;
+  font-size: 1.06rem;
+  letter-spacing: -0.01em;
+}
+
+.rechnung__wirkung {
+  font-family: var(--daten);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--strom);
+  white-space: nowrap;
+}
+
+.rechnung__erklaerung {
+  grid-column: 1 / -1;
+  font-size: 0.95rem;
+  color: #3A4750;
+  margin: 0;
+}
+
+.hinweis {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  margin-top: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  background: #EAF2F0;
+  border-left: 3px solid var(--glaskante);
+  font-size: 0.965rem;
+  color: #23453C;
+}
+
+.hinweis svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; margin-top: 0.15rem; }
+
+/* --- Einsatzgebiet -------------------------------------------------------- */
+
+.gebiet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+@media (min-width: 60rem) {
+  .gebiet { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: start; }
+}
+
+.gebiet__orte {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gebiet__orte li {
+  font-family: var(--daten);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  padding: 0.45rem 0.85rem;
+  background: var(--weiss);
+  border: var(--steg) solid var(--dunst);
+}
+
+.gebiet__orte li[data-kern] {
+  border-color: var(--elbe);
+  color: var(--elbe);
+  font-weight: 500;
+}
+
+/* --- Stimmen -------------------------------------------------------------- */
+
+.stimmen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--steg);
+  background: var(--dunst);
+  border: var(--steg) solid var(--dunst);
+}
+
+@media (min-width: 54rem) { .stimmen { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.stimme {
+  margin: 0;
+  padding: clamp(1.75rem, 3vw, 2.4rem);
+  background: var(--weiss);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.stimme__satz {
+  font-family: var(--display);
+  font-stretch: 104%;
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 1.42;
+  letter-spacing: -0.012em;
+  margin: 0;
+}
+
+.stimme__wer {
+  margin-top: auto;
+  font-family: var(--daten);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #55636D;
+}
+
+/* --- Anfrage -------------------------------------------------------------- */
+
+.anfrage {
+  background: var(--tinte);
+  color: var(--tageslicht);
+}
+
+.anfrage h2 { color: var(--weiss); }
+.anfrage .marke { color: #6FD3B8; }
+.anfrage .vorspann { color: #AFBDC6; }
+
+.anfrage__raster {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+@media (min-width: 62rem) {
+  .anfrage__raster { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+}
+
+.formular { display: grid; gap: 1.35rem; }
+
+.feld { display: grid; gap: 0.5rem; }
+
+.feld > label,
+.feldgruppe > legend {
+  font-family: var(--daten);
+  font-size: 0.72rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #8FA0AC;
+  padding: 0;
+}
+
+.feld input,
+.feld textarea,
+.feld select {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  font-family: var(--text);
+  font-size: 1rem;
+  color: var(--weiss);
+  background: rgba(255, 255, 255, 0.05);
+  border: var(--steg) solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.feld textarea { min-height: 8rem; resize: vertical; }
+
+.feld input::placeholder,
+.feld textarea::placeholder { color: #6E808D; }
+
+.feld input:hover,
+.feld textarea:hover { border-color: rgba(255, 255, 255, 0.4); }
+
+.feld input:focus,
+.feld textarea:focus {
+  outline: none;
+  border-color: #6FD3B8;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.feldgruppe {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.wahl { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+.wahl input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wahl label {
+  padding: 0.7rem 1.3rem;
+  border: var(--steg) solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  font-size: 0.94rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.wahl label:hover { border-color: rgba(255, 255, 255, 0.55); }
+
+.wahl input:checked + label {
+  background: #6FD3B8;
+  border-color: #6FD3B8;
+  color: var(--tinte);
+}
+
+.wahl input:focus-visible + label {
+  outline: 3px solid #6FD3B8;
+  outline-offset: 3px;
+}
+
+.formular__fuss {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.formular__recht {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #8FA0AC;
+  max-width: 40ch;
+}
+
+.formular__recht a { color: #AFBDC6; }
+
+.knopf--glas {
+  background: #6FD3B8;
+  color: var(--tinte);
+}
+.knopf--glas:hover { background: #8AE0C8; }
+
+/* Direkter Draht neben dem Formular */
+.draht {
+  display: grid;
+  align-self: start;
+  gap: var(--steg);
+  background: rgba(255, 255, 255, 0.14);
+  border: var(--steg) solid rgba(255, 255, 255, 0.14);
+  align-content: start;
+}
+
+.draht__zeile {
+  padding: 1.5rem;
+  background: var(--tinte);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.draht__was {
+  font-family: var(--daten);
+  font-size: 0.72rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #8FA0AC;
+}
+
+.draht__wert {
+  font-family: var(--display);
+  font-stretch: 108%;
+  font-weight: 700;
+  font-size: 1.22rem;
+  letter-spacing: -0.015em;
+  color: var(--weiss);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+a.draht__wert:hover { color: #6FD3B8; }
+
+.draht__zusatz { font-size: 0.9rem; color: #8FA0AC; }
+
+/* --- Fusszeile ------------------------------------------------------------ */
+
+.fuss {
+  background: var(--weiss);
+  border-top: var(--steg) solid var(--dunst);
+  padding-block: clamp(3rem, 6vw, 4.5rem) 6rem;
+}
+
+@media (min-width: 62rem) { .fuss { padding-bottom: clamp(3rem, 6vw, 4.5rem); } }
+
+.fuss__raster {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: var(--steg) solid var(--dunst);
+}
+
+@media (min-width: 52rem) {
+  .fuss__raster { grid-template-columns: 1.4fr 1fr 1fr; gap: 3rem; }
+}
+
+.fuss__logo { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.1rem; }
+.fuss__logo img { width: 3.2rem; }
+
+.fuss h4 {
+  font-family: var(--daten);
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-stretch: normal;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #55636D;
+  margin-bottom: 1rem;
+}
+
+.fuss__liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.65rem; }
+.fuss__liste a { font-size: 0.95rem; text-decoration: none; }
+.fuss__liste a:hover { color: var(--glaskante); }
+
+.fuss__schluss {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.75rem;
+  font-family: var(--daten);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #55636D;
+}
+
+.fuss__schluss a { text-decoration: none; }
+.fuss__schluss a:hover { color: var(--glaskante); }
+
+/* --- Rechtstexte ---------------------------------------------------------- */
+
+.prosa { max-width: 68ch; }
+.prosa h2 { margin-top: 3rem; margin-bottom: 1rem; }
+.prosa h3 { margin-top: 2rem; margin-bottom: 0.65rem; }
+.prosa h2:first-of-type { margin-top: 0; }
+.prosa ul { padding-left: 1.25rem; margin: 0 0 1.15em; }
+.prosa li { margin-bottom: 0.4rem; }
+.prosa address { font-style: normal; }
+
+.titelzeile {
+  padding-block: clamp(3.5rem, 8vw, 6rem) clamp(2rem, 4vw, 3rem);
+  border-bottom: var(--steg) solid var(--dunst);
+}
+
+.zurueck {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--daten);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #55636D;
+  margin-bottom: 1.75rem;
+}
+.zurueck:hover { color: var(--glaskante); }
+
+/* --- Platzhalter ---------------------------------------------------------
+   Steht bewusst am Dateiende: so gewinnt die Farbe gegen jede vorher
+   gesetzte Regel, auch im dunklen Kontaktblock. Alle so markierten Stellen
+   muessen vor dem Livegang ersetzt werden. */
+
+.platzhalter {
+  background: repeating-linear-gradient(135deg,
+    #FFF6E0 0px, #FFF6E0 9px, #FDEBC4 9px, #FDEBC4 18px);
+  outline: 1px dashed #C79A2E;
+  outline-offset: -1px;
+  color: #6B4E12;
+}
+
+a.platzhalter:hover { color: #4A360C; }
