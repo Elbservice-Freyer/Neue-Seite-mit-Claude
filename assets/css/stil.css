@@ -301,7 +301,7 @@ p:last-child { margin-bottom: 0; }
   bottom: 0;
   z-index: 60;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   border-top: var(--steg) solid var(--dunst);
   background: var(--weiss);
 }
@@ -314,8 +314,11 @@ p:last-child { margin-bottom: 0; }
   text-decoration: none;
 }
 
-.rufleiste a + a {
+.rufleiste a + a { border-left: var(--steg) solid var(--dunst); }
+
+.rufleiste a:last-child {
   background: var(--glaskante);
+  border-left: 0;
   color: var(--weiss);
 }
 
@@ -340,13 +343,14 @@ p:last-child { margin-bottom: 0; }
   inset: 0;
   z-index: -2;
   background-color: #9FBBD4;
+  background-position: center 62%;
   background-image:
     /* Verdunklung nur unten, wo die Schrift steht */
     linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
     /* Lichteinfall von links oben, wie durch eine offene Fensterlaibung */
     radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
     /* Himmel ueber der Elbe: hell oben, tief unten */
-    linear-gradient(to bottom, #DCEAF4 0%, #A7C4DC 34%, #5D82AB 68%, #1F3D68 100%);
+    url("../img/aufmacher.jpg");
   background-size: cover;
   background-position: center;
 }
@@ -695,12 +699,12 @@ p:last-child { margin-bottom: 0; }
   border: var(--steg) solid var(--dunst);
   background: var(--weiss);
   overflow: hidden;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 5;
   touch-action: pan-y;
 }
 
 @media (min-width: 50rem) {
-  .ergebnis { aspect-ratio: 2 / 1; }
+  .ergebnis { aspect-ratio: 4 / 3; }
 }
 
 .ergebnis__bild {
@@ -1230,3 +1234,225 @@ a.draht__wert:hover { color: #6FD3B8; }
 }
 
 a.platzhalter:hover { color: #4A360C; }
+
+/* --- Referenzen: Bilder in einem Fenster mit ungleichen Feldern ---------- */
+
+.galerie {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--steg);
+  background: var(--dunst);
+  border: var(--steg) solid var(--dunst);
+}
+
+@media (min-width: 56rem) {
+  .galerie { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  /* Das erste Bild bekommt zwei Felder — es traegt den Abschnitt. */
+  .galerie__stueck:first-child { grid-column: span 2; grid-row: span 2; }
+}
+
+.galerie__stueck {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: var(--weiss);
+  cursor: zoom-in;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+@media (min-width: 56rem) {
+  .galerie__stueck:first-child { aspect-ratio: auto; }
+}
+
+.galerie__bild {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.galerie__stueck:hover .galerie__bild { transform: scale(1.04); }
+
+.galerie__was {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.5rem 1.1rem 0.9rem;
+  background: linear-gradient(to top, rgba(9, 20, 38, 0.82), rgba(9, 20, 38, 0));
+  color: var(--weiss);
+  font-family: var(--daten);
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galerie__bild { transition: none; }
+  .galerie__stueck:hover .galerie__bild { transform: none; }
+}
+
+/* Grossansicht.
+   Wichtig: der eigene display-Wert gilt nur im geoeffneten Zustand. Sonst
+   schlaegt er die Browserregel fuer das geschlossene <dialog>, und das
+   unsichtbare Fenster liegt ueber der Seite und faengt jeden Klick ab. */
+.lupe { display: none; }
+
+.lupe[open] {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: rgba(9, 20, 38, 0.94);
+  border: 0;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+}
+
+.lupe::backdrop { background: rgba(9, 20, 38, 0.94); }
+
+.lupe__kopf { display: flex; justify-content: flex-end; }
+
+.lupe__zu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border: var(--steg) solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--weiss);
+  font-family: var(--daten);
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.lupe__zu:hover { background: rgba(255, 255, 255, 0.12); }
+
+.lupe__bild {
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lupe__fuss {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--daten);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+}
+
+.lupe__blaettern { display: flex; gap: 0.5rem; }
+
+.lupe__pfeil {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: var(--steg) solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--weiss);
+  cursor: pointer;
+}
+
+.lupe__pfeil:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* --- Wer bei Ihnen klingelt ---------------------------------------------- */
+
+.person {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--steg);
+  background: var(--dunst);
+  border: var(--steg) solid var(--dunst);
+}
+
+@media (min-width: 54rem) {
+  .person { grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr); }
+}
+
+.person__bild {
+  width: 100%;
+  height: 100%;
+  min-height: 20rem;
+  object-fit: cover;
+  object-position: 50% 22%;
+  background: var(--weiss);
+}
+
+.person__satz {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* mittig zum hohen Bild daneben */
+  gap: 1.35rem;
+  padding: clamp(2rem, 4vw, 3.25rem);
+  background: var(--weiss);
+}
+
+.person__wege {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.person__wege li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border: var(--steg) solid var(--dunst);
+  font-family: var(--daten);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+}
+
+.person__wege svg { width: 0.95rem; height: 0.95rem; color: var(--glaskante); }
+
+/* --- Rueckmeldung des Formulars ------------------------------------------ */
+
+.meldung {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 1.15rem 1.35rem;
+  border-left: 3px solid;
+  font-size: 0.965rem;
+}
+
+.meldung svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; margin-top: 0.15rem; }
+
+.meldung--gut  { background: rgba(111, 211, 184, 0.14); border-color: #6FD3B8; color: #C7EFE3; }
+.meldung--fehl { background: rgba(255, 138, 128, 0.12); border-color: #FF8A80; color: #FFCFCA; }
+
+/* Falle fuer selbsttaetige Eintraege — fuer Menschen unsichtbar */
+.falle {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
