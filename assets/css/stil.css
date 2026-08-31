@@ -374,49 +374,67 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* Ebene 1 — das, was hinter der Scheibe liegt.
-   Bis das eigene Foto vorliegt, steht hier Dresdner Vormittagshimmel
-   aus reinem CSS. Austausch: .aufmacher__blick {
+   Reihenfolge der Ebenen: Verdunklung unten, wo die Schrift steht; darunter
+   der Lichteinfall von links oben wie durch eine offene Fensterlaibung;
+   ganz unten das Foto. Austausch des Fotos: das url() in beiden
+   background-image-Zeilen aendern.
+
+   Jede Bildschirmgroesse steht zweimal da — zuerst mit dem JPG, dann mit
+   image-set(), das WebP vorzieht. Browser ohne image-set() ueberlesen die
+   zweite Zeile und behalten die erste.
+
+   Bewusst ausgeschrieben statt ueber eine CSS-Variable: sobald var() in
+   einer Deklaration steht, prueft der Browser sie erst nach dem Einsetzen.
+   Scheitert das, faellt die Eigenschaft auf ihren Anfangswert none zurueck
+   und nicht auf die Zeile davor — dann waeren auch die Verlaeufe weg. */
+.aufmacher__blick {
   position: absolute;
   inset: 0;
   z-index: -2;
   background-color: #9FBBD4;
 
-  /* Das Foto steckt in einer eigenen Variablen, damit die Verlaeufe darunter
-     nur einmal geschrieben werden muessen. Die Medienabfragen weiter unten
-     tauschen allein die Variable — je nach Bildschirmbreite eine kleinere
-     Datei. image-set() waehlt darin WebP, wo der Browser es beherrscht,
-     sonst das JPG. Browser ohne image-set() ueberlesen die Variable und
-     bekommen den JPG-Rueckfall aus der Zeile darunter. */
-  --foto: url("../img/aufmacher.jpg");
-  --foto: image-set(url("../img/aufmacher.webp") type("image/webp"),
-                    url("../img/aufmacher.jpg")  type("image/jpeg"));
-
   background-image:
-    /* Verdunklung nur unten, wo die Schrift steht */
     linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
-    /* Lichteinfall von links oben, wie durch eine offene Fensterlaibung */
     radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
-    /* Himmel ueber der Elbe: hell oben, tief unten */
-    var(--foto);
+    url("../img/aufmacher.jpg");
+  background-image:
+    linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
+    radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+    image-set(url("../img/aufmacher.webp") type("image/webp"),
+              url("../img/aufmacher.jpg") type("image/jpeg"));
+
   background-size: cover;
   background-position: center;
 }
 
-/* Kleinere Bildschirme bekommen kleinere Dateien. Die Breiten sind grosszuegig
-   gewaehlt, damit auch Geraete mit doppelter Pixeldichte scharf bleiben. */
+/* Kleinere Bildschirme bekommen kleinere Dateien: das Handy laedt 72 KB
+   statt 301 KB. Die Breiten sind grosszuegig gewaehlt, damit auch Geraete
+   mit doppelter Pixeldichte scharf bleiben. */
 @media (max-width: 700px) {
   .aufmacher__blick {
-    --foto: url("../img/aufmacher-720.webp");
-    --foto: image-set(url("../img/aufmacher-720.webp") type("image/webp"),
-                      url("../img/aufmacher.jpg")      type("image/jpeg"));
+    background-image:
+      linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
+      radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+      url("../img/aufmacher.jpg");
+    background-image:
+      linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
+      radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+      image-set(url("../img/aufmacher-720.webp") type("image/webp"),
+                url("../img/aufmacher.jpg") type("image/jpeg"));
   }
 }
 
 @media (min-width: 701px) and (max-width: 1200px) {
   .aufmacher__blick {
-    --foto: url("../img/aufmacher-1200.webp");
-    --foto: image-set(url("../img/aufmacher-1200.webp") type("image/webp"),
-                      url("../img/aufmacher.jpg")       type("image/jpeg"));
+    background-image:
+      linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
+      radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+      url("../img/aufmacher.jpg");
+    background-image:
+      linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
+      radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+      image-set(url("../img/aufmacher-1200.webp") type("image/webp"),
+                url("../img/aufmacher.jpg") type("image/jpeg"));
   }
 }
 
