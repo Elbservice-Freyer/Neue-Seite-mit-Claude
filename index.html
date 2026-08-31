@@ -12,13 +12,139 @@
 <meta property="og:locale" content="de_DE">
 <meta property="og:title" content="ElbService Freyer — Glas- und Fensterreinigung in Dresden">
 <meta property="og:description" content="Fenster, die man nicht mehr sieht. Glas- und Fensterreinigung für Zuhause und fürs Objekt, in Dresden und im Umland.">
-<meta property="og:image" content="assets/img/aufmacher.jpg">
+<meta property="og:url" content="https://www.elbservice-freyer.de/">
+<!-- Beim Teilen lesen Messenger und soziale Netze das Bild von aussen. Ein
+     relativer Pfad ergibt dort keine Adresse — deshalb die volle URL. -->
+<meta property="og:image" content="https://www.elbservice-freyer.de/assets/img/aufmacher.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="1056">
+<meta property="og:image:alt" content="Blick durch eine frisch gereinigte Fensterscheibe auf Dresden">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="assets/img/signet-ef.png">
 <link rel="apple-touch-icon" href="assets/img/signet-ef.png">
 
 <link rel="stylesheet" href="assets/css/schriften.css">
 <link rel="stylesheet" href="assets/css/stil.css">
+<!-- Strukturierte Daten fuer die lokale Suche. Alle Angaben stammen aus dem
+     Impressum. Bewusst nicht enthalten: Oeffnungszeiten (noch nicht bekannt)
+     und Bewertungen — Google erkennt Bewertungen, die ein Betrieb auf der
+     eigenen Seite ueber sich selbst auszeichnet, nicht als Sternebewertung an. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "@id": "https://www.elbservice-freyer.de/#betrieb",
+  "name": "ElbService Freyer",
+  "description": "Glas- und Fensterreinigung in Dresden für Privat und Gewerbe: Fenster innen und außen mit Rahmen und Falzen, Wintergarten und Glasdach, Schaufenster, Balkonverglasung, Rollläden und Jalousien. Einmalig oder im festen Turnus.",
+  "url": "https://www.elbservice-freyer.de/",
+  "telephone": "+4915222478238",
+  "email": "elbservice-freyer@gmx.de",
+  "image": "https://www.elbservice-freyer.de/assets/img/aufmacher.jpg",
+  "logo": "https://www.elbservice-freyer.de/assets/img/logo-elbservice-freyer.png",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Grillenburger Straße 21",
+    "postalCode": "01159",
+    "addressLocality": "Dresden",
+    "addressRegion": "Sachsen",
+    "addressCountry": "DE"
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "Felix Freyer",
+    "jobTitle": "Inhaber"
+  },
+  "knowsLanguage": "de-DE",
+  "areaServed": [
+    {
+      "@type": "City",
+      "name": "Dresden"
+    },
+    {
+      "@type": "City",
+      "name": "Radebeul"
+    },
+    {
+      "@type": "City",
+      "name": "Coswig"
+    },
+    {
+      "@type": "City",
+      "name": "Freital"
+    },
+    {
+      "@type": "City",
+      "name": "Pirna"
+    },
+    {
+      "@type": "City",
+      "name": "Heidenau"
+    },
+    {
+      "@type": "City",
+      "name": "Radeberg"
+    },
+    {
+      "@type": "City",
+      "name": "Moritzburg"
+    },
+    {
+      "@type": "City",
+      "name": "Weinböhla"
+    },
+    {
+      "@type": "City",
+      "name": "Bannewitz"
+    },
+    {
+      "@type": "City",
+      "name": "Ottendorf-Okrilla"
+    }
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Glas- und Fensterreinigung",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Fensterreinigung innen und außen inklusive Rahmen und Falzen"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Wintergarten- und Glasdachreinigung"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Schaufensterreinigung"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Reinigung von Balkonverglasungen"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Reinigung von Rollläden, Jalousien und Glastüren"
+        }
+      }
+    ]
+  }
+}
+</script>
 </head>
 <body>
 
@@ -61,7 +187,11 @@
 <header class="kopf">
   <div class="bahn kopf__inhalt">
     <a class="kopf__logo" href="#inhalt">
-      <img src="assets/img/signet-ef.png" alt="" width="58" height="58">
+      <picture>
+        <source srcset="assets/img/signet-ef-128.webp 128w, assets/img/signet-ef.webp 256w"
+                sizes="58px" type="image/webp">
+        <img src="assets/img/signet-ef.png" alt="" width="58" height="58">
+      </picture>
       <span class="kopf__wortmarke">
         <span class="kopf__name">ElbService Freyer</span>
         <span class="kopf__ort">Dresden</span>
@@ -288,10 +418,24 @@
       </div>
 
       <div class="ergebnis" data-ergebnis style="--stand:50%">
-        <img class="ergebnis__bild" src="assets/img/vergleich-vorher.jpg"
-             alt="Blick durch eine verschmutzte Fensterscheibe: Regenrückstände und Staub verschleiern das Gebäude dahinter" loading="lazy" width="1400" height="1050">
-        <img class="ergebnis__bild ergebnis__bild--nachher" src="assets/img/vergleich-nachher.jpg"
-             alt="Blick durch dieselbe Scheibe nach der Reinigung: Turm, Dach und Himmel sind klar zu erkennen" loading="lazy" width="1400" height="1050">
+        <picture>
+          <source srcset="assets/img/vergleich-vorher-400.webp 400w,
+                          assets/img/vergleich-vorher-720.webp 720w,
+                          assets/img/vergleich-vorher-1200.webp 1200w,
+                          assets/img/vergleich-vorher.webp 1400w"
+                  sizes="(max-width: 1023px) 92vw, 1166px" type="image/webp">
+          <img class="ergebnis__bild" src="assets/img/vergleich-vorher.jpg"
+               alt="Blick durch eine verschmutzte Fensterscheibe: Regenrückstände und Staub verschleiern das Gebäude dahinter" loading="lazy" width="1400" height="1050">
+        </picture>
+        <picture>
+          <source srcset="assets/img/vergleich-nachher-400.webp 400w,
+                          assets/img/vergleich-nachher-720.webp 720w,
+                          assets/img/vergleich-nachher-1200.webp 1200w,
+                          assets/img/vergleich-nachher.webp 1400w"
+                  sizes="(max-width: 1023px) 92vw, 1166px" type="image/webp">
+          <img class="ergebnis__bild ergebnis__bild--nachher" src="assets/img/vergleich-nachher.jpg"
+               alt="Blick durch dieselbe Scheibe nach der Reinigung: Turm, Dach und Himmel sind klar zu erkennen" loading="lazy" width="1400" height="1050">
+        </picture>
         <span class="ergebnis__schild ergebnis__schild--nachher">Nachher</span>
         <span class="ergebnis__schild ergebnis__schild--vorher">Vorher</span>
         <div class="ergebnis__kante" aria-hidden="true">
@@ -325,72 +469,129 @@
         <button class="galerie__stueck galerie__stueck--gross" type="button"
                 data-gross="assets/img/gaststaette.jpg"
                 data-text="Gaststätte mit Erker und Sprossenfenstern, von außen mit der Leiter gereinigt">
-          <img class="galerie__bild" src="assets/img/gaststaette.jpg" loading="lazy"
-               width="1200" height="900" alt="Gaststätte aus rotem Klinker mit Erker und weißen Sprossenfenstern, daneben eine Leiter">
+          <picture>
+            <source srcset="assets/img/gaststaette-400.webp 400w,
+                            assets/img/gaststaette-720.webp 720w,
+                            assets/img/gaststaette.webp 1200w"
+                    sizes="(max-width: 1023px) 46vw, 583px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/gaststaette.jpg" loading="lazy"
+                 width="1200" height="900" alt="Gaststätte aus rotem Klinker mit Erker und weißen Sprossenfenstern, daneben eine Leiter">
+          </picture>
           <span class="galerie__was">Gaststätte</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/wintergarten.jpg"
                 data-text="Wintergarten mit Schiebeelementen und Glasdach, außen und innen gereinigt">
-          <img class="galerie__bild" src="assets/img/wintergarten.jpg" loading="lazy"
-               width="1200" height="1600" alt="Anthrazitfarbener Wintergarten mit Schiebeelementen an einem Wohnhaus, frisch gereinigt">
+          <picture>
+            <source srcset="assets/img/wintergarten-400.webp 400w,
+                            assets/img/wintergarten-720.webp 720w,
+                            assets/img/wintergarten.webp 1200w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/wintergarten.jpg" loading="lazy"
+                 width="1200" height="1600" alt="Anthrazitfarbener Wintergarten mit Schiebeelementen an einem Wohnhaus, frisch gereinigt">
+          </picture>
           <span class="galerie__was">Wintergarten &amp; Glasdach</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/glasfassade.jpg"
                 data-text="Glasfassade mit Sprossenteilung, von unten aufgenommen">
-          <img class="galerie__bild" src="assets/img/glasfassade.jpg" loading="lazy"
-               width="1000" height="1333" alt="Große weiß gerahmte Glasfassade von unten, im Glas spiegelt sich der blaue Himmel">
+          <picture>
+            <source srcset="assets/img/glasfassade-400.webp 400w,
+                            assets/img/glasfassade-720.webp 720w,
+                            assets/img/glasfassade.webp 1000w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/glasfassade.jpg" loading="lazy"
+                 width="1000" height="1333" alt="Große weiß gerahmte Glasfassade von unten, im Glas spiegelt sich der blaue Himmel">
+          </picture>
           <span class="galerie__was">Glasfassade</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/dachfenster.jpg"
                 data-text="Trapezfenster in der Dachschräge — die schwer erreichbaren Ecken von Hand">
-          <img class="galerie__bild" src="assets/img/dachfenster.jpg" loading="lazy"
-               width="1100" height="1467" alt="Trapezförmiges Dachfenster wird von innen mit dem Abzieher gereinigt">
+          <picture>
+            <source srcset="assets/img/dachfenster-400.webp 400w,
+                            assets/img/dachfenster-720.webp 720w,
+                            assets/img/dachfenster.webp 1100w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/dachfenster.jpg" loading="lazy"
+                 width="1100" height="1467" alt="Trapezförmiges Dachfenster wird von innen mit dem Abzieher gereinigt">
+          </picture>
           <span class="galerie__was">Dachfenster &amp; Schräge</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/altbau-erdgeschoss.jpg"
                 data-text="Altbaufenster im Erdgeschoss, gereinigt mit der Teleskopstange">
-          <img class="galerie__bild" src="assets/img/altbau-erdgeschoss.jpg" loading="lazy"
-               width="1000" height="1333" alt="Altbaufassade mit weißen Fenstern im Erdgeschoss, davor eine rote Teleskopstange">
+          <picture>
+            <source srcset="assets/img/altbau-erdgeschoss-400.webp 400w,
+                            assets/img/altbau-erdgeschoss-720.webp 720w,
+                            assets/img/altbau-erdgeschoss.webp 1000w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/altbau-erdgeschoss.jpg" loading="lazy"
+                 width="1000" height="1333" alt="Altbaufassade mit weißen Fenstern im Erdgeschoss, davor eine rote Teleskopstange">
+          </picture>
           <span class="galerie__was">Altbau, Erdgeschoss</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/aufmacher.jpg"
                 data-text="Fensterfront mit Festverglasung und Dachfenstern an einer Holzfassade">
-          <img class="galerie__bild" src="assets/img/aufmacher.jpg" loading="lazy"
-               width="1600" height="1056" alt="Große Fensterfront mit Festverglasung an einer dunklen Holzfassade">
+          <picture>
+            <source srcset="assets/img/aufmacher-400.webp 400w,
+                            assets/img/aufmacher-720.webp 720w,
+                            assets/img/aufmacher-1200.webp 1200w,
+                            assets/img/aufmacher.webp 1600w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/aufmacher.jpg" loading="lazy"
+                 width="1600" height="1056" alt="Große Fensterfront mit Festverglasung an einer dunklen Holzfassade">
+          </picture>
           <span class="galerie__was">Fensterfront</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/altbau-holzfenster.jpg"
                 data-text="Altbaufenster aus Holz mit Sprossen, von der Leiter aus gereinigt">
-          <img class="galerie__bild" src="assets/img/altbau-holzfenster.jpg" loading="lazy"
-               width="1000" height="1333" alt="Zwei hohe Altbaufenster aus braunem Holz mit Sprossen, daneben eine Teleskopleiter">
+          <picture>
+            <source srcset="assets/img/altbau-holzfenster-400.webp 400w,
+                            assets/img/altbau-holzfenster-720.webp 720w,
+                            assets/img/altbau-holzfenster.webp 1000w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/altbau-holzfenster.jpg" loading="lazy"
+                 width="1000" height="1333" alt="Zwei hohe Altbaufenster aus braunem Holz mit Sprossen, daneben eine Teleskopleiter">
+          </picture>
           <span class="galerie__was">Altbau, Holzfenster</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/vergleich-nachher.jpg"
                 data-text="Blick durch die fertig gereinigte Scheibe — Rahmen und Falze inbegriffen">
-          <img class="galerie__bild" src="assets/img/vergleich-nachher.jpg" loading="lazy"
-               width="1400" height="1050" alt="Klarer Blick durch eine gereinigte Fensterscheibe auf Dächer und einen Turm">
+          <picture>
+            <source srcset="assets/img/vergleich-nachher-400.webp 400w,
+                            assets/img/vergleich-nachher-720.webp 720w,
+                            assets/img/vergleich-nachher-1200.webp 1200w,
+                            assets/img/vergleich-nachher.webp 1400w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/vergleich-nachher.jpg" loading="lazy"
+                 width="1400" height="1050" alt="Klarer Blick durch eine gereinigte Fensterscheibe auf Dächer und einen Turm">
+          </picture>
           <span class="galerie__was">Nach der Reinigung</span>
         </button>
 
         <button class="galerie__stueck" type="button"
                 data-gross="assets/img/vergleich-vorher.jpg"
                 data-text="Dieselbe Scheibe vor der Reinigung: Regenrückstände, Staub und Blütenstaub">
-          <img class="galerie__bild" src="assets/img/vergleich-vorher.jpg" loading="lazy"
-               width="1400" height="1050" alt="Stark verschmutzte Fensterscheibe mit Regenrückständen im Gegenlicht">
+          <picture>
+            <source srcset="assets/img/vergleich-vorher-400.webp 400w,
+                            assets/img/vergleich-vorher-720.webp 720w,
+                            assets/img/vergleich-vorher-1200.webp 1200w,
+                            assets/img/vergleich-vorher.webp 1400w"
+                    sizes="(max-width: 1023px) 46vw, 291px" type="image/webp">
+            <img class="galerie__bild" src="assets/img/vergleich-vorher.jpg" loading="lazy"
+                 width="1400" height="1050" alt="Stark verschmutzte Fensterscheibe mit Regenrückständen im Gegenlicht">
+          </picture>
           <span class="galerie__was">Vor der Reinigung</span>
         </button>
       </div>
@@ -452,9 +653,15 @@
   <section class="abschnitt sprosse-oben" id="person" aria-labelledby="person-titel">
     <div class="bahn">
       <div class="person">
-        <img class="person__bild" src="assets/img/portraet-freyer.jpg" loading="lazy"
-             width="900" height="1200"
-             alt="Felix Freyer zieht mit dem Abzieher die obere Scheibe eines Dachfensters ab">
+        <picture>
+          <source srcset="assets/img/portraet-freyer-400.webp 400w,
+                          assets/img/portraet-freyer-720.webp 720w,
+                          assets/img/portraet-freyer.webp 900w"
+                  sizes="(max-width: 1023px) 92vw, 719px" type="image/webp">
+          <img class="person__bild" src="assets/img/portraet-freyer.jpg" loading="lazy"
+               width="900" height="1200"
+               alt="Felix Freyer zieht mit dem Abzieher die obere Scheibe eines Dachfensters ab">
+        </picture>
         <div class="person__satz">
           <div>
             <span class="marke">Wer kommt</span>
@@ -602,7 +809,12 @@
   </section>
 
   <!-- ====================================================================
-       Stimmen — Struktur steht, echte Zitate trägt der Betrieb nach
+       Stimmen — echte Rückmeldungen, vom Betrieb zur Veröffentlichung
+       freigegeben. Nur solche gehören hierher: erfundene oder ungefragt
+       übernommene Bewertungen sind wettbewerbsrechtlich angreifbar.
+       Bewusst ohne schema.org-Bewertungsauszeichnung — Sternebewertungen,
+       die ein Betrieb auf der eigenen Seite über sich selbst auszeichnet,
+       erkennt Google nicht an.
        ==================================================================== -->
   <section class="abschnitt sprosse-oben" id="stimmen" aria-labelledby="stimmen-titel">
     <div class="bahn">
@@ -742,7 +954,11 @@
     <div class="fuss__raster">
       <div>
         <div class="fuss__logo">
-          <img src="assets/img/signet-ef.png" alt="" width="64" height="64">
+          <picture>
+            <source srcset="assets/img/signet-ef-128.webp 128w, assets/img/signet-ef.webp 256w"
+                    sizes="58px" type="image/webp">
+            <img src="assets/img/signet-ef.png" alt="" width="64" height="64">
+          </picture>
           <span class="kopf__wortmarke">
             <span class="kopf__name">ElbService Freyer</span>
             <span class="kopf__ort">Dresden</span>

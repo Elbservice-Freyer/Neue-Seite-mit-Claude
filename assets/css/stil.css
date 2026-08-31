@@ -64,6 +64,44 @@ body {
 
 img, svg { display: block; max-width: 100%; height: auto; }
 
+/* <picture> umschliesst jedes Foto, damit der Browser WebP waehlen kann.
+   display:contents nimmt die Huelle aus dem Layout — die Regeln greifen
+   weiter am <img>, als staende es unveraendert an seiner alten Stelle. */
+picture { display: contents; }
+
+/* --- Auftritt beim Scrollen ------------------------------------------------
+   Abschnitte blenden beim Hereinscrollen um eine Haaresbreite auf. Der
+   Versatz bleibt bei 12 px: es soll wie ein Aufblenden wirken, nicht wie
+   ein Hereinfahren.
+
+   Alles haengt an .auftritt-an, und diese Klasse setzt allein das
+   JavaScript. Laeuft keins — oder liest ein Suchmaschinen-Roboter die
+   Seite —, greift keine einzige dieser Regeln und der Inhalt steht
+   unveraendert sichtbar da. Nichts wird je unsichtbar ausgeliefert. */
+
+.auftritt-an [data-auftritt] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.38s cubic-bezier(0.22, 0.61, 0.36, 1) var(--auftritt-verzug, 0s),
+    transform 0.38s cubic-bezier(0.22, 0.61, 0.36, 1) var(--auftritt-verzug, 0s);
+}
+
+.auftritt-an [data-auftritt].ist-da {
+  opacity: 1;
+  transform: none;
+}
+
+/* Zweite Sicherung: sollte die Klasse je gesetzt sein, waehrend der Nutzer
+   Bewegung abbestellt hat, bleibt trotzdem alles sofort sichtbar. */
+@media (prefers-reduced-motion: reduce) {
+  .auftritt-an [data-auftritt] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 a { color: inherit; }
 
 :focus-visible {
@@ -337,22 +375,49 @@ p:last-child { margin-bottom: 0; }
 
 /* Ebene 1 — das, was hinter der Scheibe liegt.
    Bis das eigene Foto vorliegt, steht hier Dresdner Vormittagshimmel
-   aus reinem CSS. Austausch: .aufmacher__blick { background-image: url(...) } */
-.aufmacher__blick {
+   aus reinem CSS. Austausch: .aufmacher__blick {
   position: absolute;
   inset: 0;
   z-index: -2;
   background-color: #9FBBD4;
-  background-position: center 62%;
+
+  /* Das Foto steckt in einer eigenen Variablen, damit die Verlaeufe darunter
+     nur einmal geschrieben werden muessen. Die Medienabfragen weiter unten
+     tauschen allein die Variable — je nach Bildschirmbreite eine kleinere
+     Datei. image-set() waehlt darin WebP, wo der Browser es beherrscht,
+     sonst das JPG. Browser ohne image-set() ueberlesen die Variable und
+     bekommen den JPG-Rueckfall aus der Zeile darunter. */
+  --foto: url("../img/aufmacher.jpg");
+  --foto: image-set(url("../img/aufmacher.webp") type("image/webp"),
+                    url("../img/aufmacher.jpg")  type("image/jpeg"));
+
   background-image:
     /* Verdunklung nur unten, wo die Schrift steht */
     linear-gradient(to top, rgba(9, 20, 38, 0.78) 0%, rgba(9, 20, 38, 0.46) 32%, rgba(9, 20, 38, 0.12) 58%, rgba(9, 20, 38, 0) 78%),
     /* Lichteinfall von links oben, wie durch eine offene Fensterlaibung */
     radial-gradient(120% 90% at 14% 6%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
     /* Himmel ueber der Elbe: hell oben, tief unten */
-    url("../img/aufmacher.jpg");
+    var(--foto);
   background-size: cover;
   background-position: center;
+}
+
+/* Kleinere Bildschirme bekommen kleinere Dateien. Die Breiten sind grosszuegig
+   gewaehlt, damit auch Geraete mit doppelter Pixeldichte scharf bleiben. */
+@media (max-width: 700px) {
+  .aufmacher__blick {
+    --foto: url("../img/aufmacher-720.webp");
+    --foto: image-set(url("../img/aufmacher-720.webp") type("image/webp"),
+                      url("../img/aufmacher.jpg")      type("image/jpeg"));
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1200px) {
+  .aufmacher__blick {
+    --foto: url("../img/aufmacher-1200.webp");
+    --foto: image-set(url("../img/aufmacher-1200.webp") type("image/webp"),
+                      url("../img/aufmacher.jpg")       type("image/jpeg"));
+  }
 }
 
 /* Ebene 2 — der Schmutzfilm. Wird beim Laden einmal abgezogen. */

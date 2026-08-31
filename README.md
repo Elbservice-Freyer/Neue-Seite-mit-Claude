@@ -11,9 +11,10 @@ datenschutz.html      Datenschutzerklärung
 kontakt.php           nimmt das Formular entgegen und schickt es als E-Mail
 assets/css/stil.css   das gesamte Gestaltungssystem
 assets/css/schriften.css  lokal ausgelieferte Schriften
-assets/js/seite.js    Vergleichsregler, Großansicht, Formular
+assets/js/seite.js    Vergleichsregler, Großansicht, Formular, Auftritt beim Scrollen
 assets/fonts/         Archivo, IBM Plex Sans, IBM Plex Mono (woff2)
-assets/img/           Signet, Logo, Fotos
+assets/img/           Signet, Logo, Fotos — je Foto ein JPG und die WebP-Fassungen
+werkzeug/bilder.py    legt die WebP-Fassungen an (nur beim Bildwechsel nötig)
 ```
 
 Vorschau mit PHP, damit auch das Formular läuft:
@@ -30,7 +31,7 @@ php -S localhost:8000     # dann http://localhost:8000 öffnen
 |---|---|
 | **Speicherdauer der Server-Logdateien** | `datenschutz.html`, beim Hoster erfragen |
 | **Absenderadresse für das Formular** | `kontakt.php`, Konstante `ABSENDER` |
-| **Domain in `canonical` und `og:image`** | `index.html`, Kopfbereich |
+| **Öffnungszeiten** | `index.html`, strukturierte Daten — siehe unten |
 
 Alles gelb Schraffierte ist ein Platzhalter. Nach dem Ersetzen jeweils
 `class="platzhalter"` entfernen, damit die Markierung verschwindet.
@@ -108,8 +109,31 @@ Vor dem Hochladen jedes Foto einmal ganz ansehen: Aufkleber, Kennzeichen,
 Hausnummern und Personen im Bild fallen sonst erst auf, wenn die Seite online
 ist.
 
-Neue Fotos vor dem Hochladen verkleinern (unter 400 KB), sonst wird die Seite
-auf dem Handy langsam.
+### Nach jedem Bildwechsel: einmal umwandeln
+
+Die Seite liefert Fotos als WebP aus, und zwar in mehreren Breiten — ein Handy
+lädt dadurch rund ein Fünftel dessen, was ein großer Monitor lädt. Zu jedem
+`foto.jpg` gehören deshalb `foto.webp`, `foto-400.webp`, `foto-720.webp` und
+`foto-1200.webp`. Angelegt werden sie mit:
+
+```bash
+python3 werkzeug/bilder.py          # legt nur an, was fehlt
+python3 werkzeug/bilder.py --neu    # rechnet auch Vorhandenes neu
+```
+
+Einmalig nötig: `pip install Pillow`. Das JPG bleibt liegen — es ist der
+Rückfall für die wenigen Browser ohne WebP.
+
+**Foto unter gleichem Namen ausgetauscht?** Dann `--neu` verwenden, sonst
+bleiben die alten WebP-Dateien liegen und die Seite zeigt weiter das alte Bild.
+
+**Neues Foto zusätzlich eingefügt?** Im HTML gehört es in ein `<picture>` nach
+dem Muster der vorhandenen: das `<source>` trägt die Breiten (`srcset`) und die
+Anzeigegröße (`sizes`), das `<img>` darin das JPG als Rückfall. Die `sizes`
+sind je Verwendung verschieden — für eine Galeriekachel steht dort
+`(max-width: 1023px) 46vw, 291px`, das ist die gemessene Anzeigebreite.
+
+Fotos weiterhin unter 400 KB halten, bevor sie umgewandelt werden.
 
 ---
 
@@ -143,6 +167,49 @@ ausgeliefert — so geht beim Seitenaufruf keine IP-Adresse an Google.
 Wer im Betriebssystem „Bewegung reduzieren" eingestellt hat, sieht die saubere
 Scheibe sofort.
 
+**Bewegung beim Scrollen.** Abschnittsköpfe, Ablaufschritte, Galeriekacheln und
+Kundenstimmen blenden beim Hereinscrollen auf — 12 px Versatz, 0,38 s, in
+Reihen leicht versetzt. Es soll wie ein Aufblenden wirken, nicht wie ein
+Hereinfahren.
+
+Der wichtige Teil steckt in der Umsetzung: **versteckt wird ausschließlich per
+JavaScript.** Erst das Skript setzt die Klasse `auftritt-an` am `<html>`, und
+nur daran hängen die CSS-Regeln. Läuft kein JavaScript — oder liest ein
+Suchmaschinen-Roboter die Seite —, greift keine einzige dieser Regeln und der
+volle Inhalt steht sofort sichtbar da. Bei „Bewegung reduzieren" wird die
+Klasse gar nicht erst gesetzt.
+
+**Der Vergleichsregler** fährt einmal von selbst auf, sobald er ins Bild kommt,
+sonst ahnt niemand, dass daran zu ziehen ist. Die Vorführung bricht bei der
+ersten eigenen Berührung sofort ab und entfällt bei „Bewegung reduzieren"
+ganz.
+
+---
+
+## Strukturierte Daten
+
+Im Kopf von `index.html` steht ein `application/ld+json`-Block: er sagt
+Suchmaschinen in maschinenlesbarer Form, dass hier ein Handwerksbetrieb in
+Dresden sitzt, welche Leistungen er anbietet und in welchen Orten er arbeitet.
+Für einen Betrieb, der lokal gefunden werden will, ist das der wirksamste
+einzelne Eintrag auf der Seite.
+
+Alle Angaben darin stammen wörtlich aus dem Impressum. **Ändert sich dort
+etwas — Adresse, Telefonnummer, Name —, muss es hier mitgeändert werden.**
+Widersprechen sich beide, schadet das mehr, als der Eintrag nützt.
+
+Zwei Dinge fehlen bewusst:
+
+- **Öffnungszeiten.** Sobald feste Zeiten stehen, gehört ins JSON ein Eintrag
+  `"openingHoursSpecification"`. Erfundene Zeiten sind schlimmer als keine.
+- **Sternebewertungen.** Google erkennt Bewertungen, die ein Betrieb auf der
+  eigenen Seite über sich selbst auszeichnet, nicht als Sterne an und wertet
+  den Versuch im Zweifel ab. Echte Sterne entstehen über das
+  Google-Unternehmensprofil, nicht über die eigene Webseite.
+
+Prüfen lässt sich der Block mit dem Test für Rich-Suchergebnisse von Google
+oder dem Schema-Markup-Validator von schema.org.
+
 ---
 
 ## Barrierefreiheit
@@ -163,7 +230,11 @@ Eingebaut und beim Ändern bitte erhalten:
 ## Veröffentlichen
 
 Kein Bauschritt. Der Ordnerinhalt wird unverändert hochgeladen, per FTP zu
-einem Webhoster mit PHP.
+einem Webhoster mit PHP. Die WebP-Fassungen der Fotos liegen fertig im
+Projekt — auf dem Server wird nichts gerechnet.
+
+`werkzeug/` und `README.md` gehören nicht auf den Server. Sie schaden dort
+nicht, haben aber nichts verloren, was Besucher abrufen können.
 
 Statische Dienste wie Netlify, Cloudflare Pages oder GitHub Pages funktionieren
 für die Seite selbst, führen aber kein PHP aus — dort würde das Formular nicht
@@ -176,5 +247,15 @@ Zwei Dinge beim Hoster einstellen:
 2. **Umleitung auf eine Adressform.** Entweder immer mit `www.` oder immer
    ohne — sonst zählt Google die Seite doppelt.
 
-Danach in `index.html` die Zeilen `<link rel="canonical">` und
-`<meta property="og:image">` auf die echte Domain setzen.
+In `index.html` steht die Domain `https://www.elbservice-freyer.de/` an sieben
+Stellen: `canonical`, `og:url` und `og:image` im Kopfbereich sowie `@id`,
+`url`, `image` und `logo` im Block mit den strukturierten Daten. **Lautet die
+echte Adresse anders — etwa ohne `www.` —, müssen alle sieben geändert
+werden.** Sie müssen zeichengenau zu der Form passen, auf die der Hoster
+umleitet, sonst zählt Google die Seite doppelt.
+
+Prüfen lässt sich das mit:
+
+```bash
+grep -n 'elbservice-freyer.de' index.html
+```
