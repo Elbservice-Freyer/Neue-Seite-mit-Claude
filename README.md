@@ -30,7 +30,7 @@ php -S localhost:8000     # dann http://localhost:8000 öffnen
 |---|---|
 | **Speicherdauer der Server-Logdateien** | `datenschutz.html`, beim Hoster erfragen |
 | **Zwei bis drei echte Kundenstimmen** | `index.html`, Abschnitt „Stimmen" |
-| **Ein weiteres Referenzfoto** | `index.html`, letzte Kachel der Galerie |
+| **Ein Foto von einem Gewerbeobjekt** | Schaufenster oder Ladeneingang — bisher zeigt die Galerie nur Privatobjekte |
 | **Absenderadresse für das Formular** | `kontakt.php`, Konstante `ABSENDER` |
 | **Domain in `canonical` und `og:image`** | `index.html`, Kopfbereich |
 
@@ -89,6 +89,7 @@ ergänzt werden. Der eigene Server ist der sauberere Weg.
 | `vergleich-nachher.jpg` | rechte Seite des Reglers | 4:3, gleicher Ausschnitt wie vorher |
 | `wintergarten.jpg` | große Galeriekachel | hoch oder quadratisch |
 | `portraet-freyer.jpg` | Abschnitt „Wer kommt" | hoch, Kopf im oberen Drittel |
+| `dachfenster.jpg` | vierte Galeriekachel | hoch oder quadratisch |
 
 Beim Vergleichsregler kommt es auf den Ausschnitt an: gleicher Standpunkt,
 gleicher Bildwinkel, gleiches Seitenverhältnis. Am besten das Handy für beide
