@@ -1247,8 +1247,9 @@ a.platzhalter:hover { color: #4A360C; }
 
 @media (min-width: 56rem) {
   .galerie { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  /* Das erste Bild bekommt zwei Felder — es traegt den Abschnitt. */
-  .galerie__stueck:first-child { grid-column: span 2; grid-row: span 2; }
+  /* Ein Bild traegt den Abschnitt und belegt vier Felder. Mit neun Feldern
+     geht das Raster dann genau in drei Reihen auf. */
+  .galerie__stueck--gross { grid-column: span 2; grid-row: span 2; }
 }
 
 .galerie__stueck {
@@ -1266,7 +1267,7 @@ a.platzhalter:hover { color: #4A360C; }
 }
 
 @media (min-width: 56rem) {
-  .galerie__stueck:first-child { aspect-ratio: auto; }
+  .galerie__stueck--gross { aspect-ratio: auto; }
 }
 
 .galerie__bild {

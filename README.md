@@ -29,8 +29,6 @@ php -S localhost:8000     # dann http://localhost:8000 öffnen
 | Was | Wo |
 |---|---|
 | **Speicherdauer der Server-Logdateien** | `datenschutz.html`, beim Hoster erfragen |
-| **Zwei bis drei echte Kundenstimmen** | `index.html`, Abschnitt „Stimmen" |
-| **Ein Foto von einem Gewerbeobjekt** | Schaufenster oder Ladeneingang — bisher zeigt die Galerie nur Privatobjekte |
 | **Absenderadresse für das Formular** | `kontakt.php`, Konstante `ABSENDER` |
 | **Domain in `canonical` und `og:image`** | `index.html`, Kopfbereich |
 
@@ -89,7 +87,9 @@ ergänzt werden. Der eigene Server ist der sauberere Weg.
 | `vergleich-nachher.jpg` | rechte Seite des Reglers | 4:3, gleicher Ausschnitt wie vorher |
 | `wintergarten.jpg` | große Galeriekachel | hoch oder quadratisch |
 | `portraet-freyer.jpg` | Abschnitt „Wer kommt" | hoch, Kopf im oberen Drittel |
-| `dachfenster.jpg` | vierte Galeriekachel | hoch oder quadratisch |
+| `dachfenster.jpg` | Galerie | hoch oder quadratisch |
+| `gaststaette.jpg` | großes Galeriefeld | quer, 4:3 |
+| `glasfassade.jpg`, `altbau-erdgeschoss.jpg`, `altbau-holzfenster.jpg` | Galerie | hoch, 3:4 |
 
 Beim Vergleichsregler kommt es auf den Ausschnitt an: gleicher Standpunkt,
 gleicher Bildwinkel, gleiches Seitenverhältnis. Am besten das Handy für beide
@@ -98,6 +98,15 @@ desto stärker wirkt der Effekt.
 
 Für die Galerie eine neue Kachel nach dem Muster der vorhandenen einfügen —
 `data-gross` ist das Bild für die Großansicht, `data-text` die Bildunterschrift.
+Das große Feld trägt zusätzlich `galerie__stueck--gross`.
+
+**Wichtig zur Anzahl:** Das große Feld belegt vier Plätze. Damit das Raster
+ohne Lücke aufgeht, braucht es 5, 9 oder 13 Kacheln — aktuell sind es neun.
+Bei einer anderen Zahl bleibt in der letzten Reihe eine Lücke stehen.
+
+Vor dem Hochladen jedes Foto einmal ganz ansehen: Aufkleber, Kennzeichen,
+Hausnummern und Personen im Bild fallen sonst erst auf, wenn die Seite online
+ist.
 
 Neue Fotos vor dem Hochladen verkleinern (unter 400 KB), sonst wird die Seite
 auf dem Handy langsam.
